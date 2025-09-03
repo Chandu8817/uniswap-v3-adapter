@@ -1,0 +1,6 @@
+{
+  "network": "arbitrum-local",
+  "factory": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+  "adapter": "0x1E2aCD68C1C09d41c72E835Da8152e1028Be0F20",
+  "startblock": "375321651"
+}

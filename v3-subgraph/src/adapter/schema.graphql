@@ -1,0 +1,38 @@
+type Pair @entity(immutable: true) {
+  id: ID!
+  token0: Token!
+  token1: Token!
+  pool: Pool!
+  createdAtTimestamp: BigInt!
+  createdAtBlockNumber: BigInt!
+}
+
+type LiquidityAdded @entity(immutable: true) {
+  id: ID!
+  pair: Pair!
+  tokenId: BigInt!
+  amountA: BigInt!
+  amountB: BigInt!
+  createdAtTimestamp: BigInt!
+  createdAtBlockNumber: BigInt!
+}
+
+type LiquidityRemoved @entity(immutable: true) {
+  id: ID!
+  pair: Pair!
+  tokenId: BigInt!
+  amountA: BigInt!
+  amountB: BigInt!
+  createdAtTimestamp: BigInt!
+  createdAtBlockNumber: BigInt!
+}
+
+type TokensSwapped @entity(immutable: true) {
+  id: ID!
+  pair: Pair!
+  amountIn: BigInt!
+  amountOut: BigInt!
+  createdAtTimestamp: BigInt!
+  createdAtBlockNumber: BigInt!
+}
+

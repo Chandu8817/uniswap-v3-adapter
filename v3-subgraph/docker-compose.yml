@@ -1,0 +1,42 @@
+services:
+  graph-node:
+    image: graphprotocol/graph-node:latest
+    environment:
+      postgres_host: postgres
+      postgres_user: graph
+      postgres_pass: letmein
+      postgres_password: letmein
+      postgres_db: graph
+      ethereum: 'arbitrum-local:http://host.docker.internal:8545'
+      ipfs: 'ipfs:5001'
+    ports:
+      - '8000:8000'
+      - '8001:8001'
+      - '8020:8020'
+    depends_on:
+      - postgres
+      - ipfs
+
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: graph
+      POSTGRES_PASSWORD: letmein
+      POSTGRES_DB: graph
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --lc-collate=C --lc-ctype=C"
+      LANG: C.UTF-8
+      LC_ALL: C.UTF-8
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  ipfs:
+    image: ipfs/go-ipfs:v0.18.0
+    ports:
+      - '5001:5001'
+      - '8080:8080'
+      - '4001:4001'
+
+volumes:
+  postgres-data:
