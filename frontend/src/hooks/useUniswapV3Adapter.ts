@@ -1,12 +1,11 @@
-import { useState, useEffect } from 'react';
-import { ethers } from 'ethers';
-import { JsonRpcSigner } from 'ethers';
-import  UNISWAP_V3_ADAPTER_ABI  from '../abis/UniswapV3Adapter.json';
-
-
+import { useState, useEffect } from "react";
+import { ethers } from "ethers";
+import { JsonRpcSigner } from "ethers";
+import UNISWAP_V3_ADAPTER_ABI from "../abis/UniswapV3Adapter.json";
 
 // Replace with your contract address
-const UNISWAP_V3_ADAPTER_ADDRESS = import.meta.env.VITE_UNISWAP_V3_ADAPTER_ADDRESS;
+const UNISWAP_V3_ADAPTER_ADDRESS = import.meta.env
+  .VITE_UNISWAP_V3_ADAPTER_ADDRESS;
 
 export const useUniswapV3Adapter = (signer: JsonRpcSigner | null) => {
   const [contract, setContract] = useState<ethers.Contract | null>(null);
@@ -14,23 +13,26 @@ export const useUniswapV3Adapter = (signer: JsonRpcSigner | null) => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    console.log('useEffect in useUniswapV3Adapter - signer changed:', !!signer);
+    console.log("useEffect in useUniswapV3Adapter - signer changed:", !!signer);
     if (signer) {
       try {
-        console.log('Creating new contract instance with address:', UNISWAP_V3_ADAPTER_ADDRESS);
+        console.log(
+          "Creating new contract instance with address:",
+          UNISWAP_V3_ADAPTER_ADDRESS,
+        );
         const contractInstance = new ethers.Contract(
           UNISWAP_V3_ADAPTER_ADDRESS,
           UNISWAP_V3_ADAPTER_ABI,
-          signer
+          signer,
         );
-        console.log('Contract instance created:', contractInstance);
+        console.log("Contract instance created:", contractInstance);
         setContract(contractInstance);
       } catch (err) {
-        console.error('Error creating contract instance:', err);
-        setError('Failed to initialize contract');
+        console.error("Error creating contract instance:", err);
+        setError("Failed to initialize contract");
       }
     } else {
-      console.log('No signer available, setting contract to null');
+      console.log("No signer available, setting contract to null");
       setContract(null);
     }
   }, [signer]);
@@ -44,108 +46,78 @@ export const useUniswapV3Adapter = (signer: JsonRpcSigner | null) => {
     decimalsOut: number,
   ) => {
     if (!contract) {
-      throw new Error('Contract not initialized');
+      throw new Error("Contract not initialized");
     }
 
     try {
       setLoading(true);
       setError(null);
-      debugger
+
       const amountInWei = ethers.parseUnits(amountIn, decimalsIn);
-     
+
       const quote = await contract.getQuote.staticCall(
         tokenIn,
         tokenOut,
         fee,
         amountInWei,
       );
-      
-      return ethers.formatUnits(quote, decimalsOut); // Adjust decimals as needed
+
+      return ethers.formatUnits(quote, decimalsOut);
     } catch (err: any) {
-      console.error('Error getting quote:', err);
-      setError(err.message || 'Failed to get quote');
+      console.error("Error getting quote:", err);
+      setError(err.message || "Failed to get quote");
       throw err;
     } finally {
       setLoading(false);
     }
   };
 
-
-
   const addLiquidity = async (
     tokenA: string,
     tokenB: string,
-    amountA: string,
-    amountB: string,
+    amountA: bigint,
+    amountB: bigint,
     tickLower: number,
     tickUpper: number,
-    fee: number // fee in basis points (e.g., 3000 for 0.3%)
+
+    fee: number, // fee in basis points (e.g., 3000 for 0.3%)
+    decimalsA: number,
+    decimalsB: number,
   ) => {
     if (!contract) {
-      throw new Error('Contract not initialized');
+      throw new Error("Contract not initialized");
     }
 
     // Validate fee tier (common Uniswap V3 fee tiers: 100, 500, 3000, 10000)
     const validFees = [100, 500, 3000, 10000];
     if (!validFees.includes(fee)) {
-      throw new Error(`Invalid fee tier. Must be one of: ${validFees.join(', ')}`);
+      throw new Error(
+        `Invalid fee tier. Must be one of: ${validFees.join(", ")}`,
+      );
     }
 
     try {
       setLoading(true);
       setError(null);
-      
+
       // Parse amounts with appropriate decimals (18 for WETH, 6 for USDC, etc.)
-      const tokenADecimals = tokenA.toLowerCase() === '0xaf88d065e77c8cc2239327c5edb3a432268e5831'.toLowerCase() ? 6 : 18;
-      const tokenBDecimals = 18; // WETH has 18 decimals
-      
+
       // Convert amounts to BigInt with correct decimals
-      const amountAWei = ethers.parseUnits(amountA, tokenADecimals);
-      const amountBWei = ethers.parseUnits(amountB, tokenBDecimals);
-      
-      console.log('Adding liquidity with params:', {
+
+      console.log("Adding liquidity with params:", {
         tokenA,
         tokenB,
         fee,
-        amountA: amountAWei.toString(),
-        amountB: amountBWei.toString(),
+        amountA: amountA.toString(),
+        amountB: amountB.toString(),
         tickLower,
         tickUpper,
-        tokenADecimals,
-        tokenBDecimals
+        decimalsA,
+        decimalsB,
       });
 
       if (!contract.runner) {
-        throw new Error('No signer available');
-      }
-      
-      const signerAddress = await (contract.runner as ethers.JsonRpcSigner).getAddress();
-      
-      // Check if contract has enough allowance
-      const erc20A = new ethers.Contract(
-        tokenA,
-        ['function allowance(address,address) view returns (uint256)'],
-        contract.runner
-      );
-      debugger
-      const erc20B = new ethers.Contract(
-        tokenB,
-        ['function allowance(address,address) view returns (uint256)'],
-        contract.runner
-     );
-     
-      const [allowanceA, allowanceB] = await Promise.all([
-        erc20A.allowance(signerAddress, contract.target),
-        erc20B.allowance(signerAddress, contract.target)
-      ]);
-
-      console.log('Current allowances:', {
-        tokenA: allowanceA.toString(),
-        tokenB: allowanceB.toString()
-      });
-
-      if (allowanceA < amountAWei || allowanceB < amountBWei) {
-        throw new Error('Insufficient token allowance. Please approve tokens first.');
+        throw new Error("No signer available");
       }
 
       // Increase gas limit for complex operations
@@ -153,51 +125,50 @@ export const useUniswapV3Adapter = (signer: JsonRpcSigner | null) => {
         tokenA,
         tokenB,
         fee,
-        amountAWei,
-        amountBWei,
+        amountA,
+        amountB,
         tickLower,
         tickUpper,
-    
       );
-      
-      console.log('Transaction submitted, waiting for confirmation...');
+
+      console.log("Transaction submitted, waiting for confirmation...");
       const receipt = await tx.wait();
-      console.log('Transaction confirmed:', receipt);
+      console.log("Transaction confirmed:", receipt);
       return receipt;
     } catch (err: any) {
-      console.error('Error adding liquidity:', err);
-      setError(err.message || 'Failed to add liquidity');
+      console.error("Error adding liquidity:", err);
+      setError(err.message || "Failed to add liquidity");
       throw err;
     } finally {
       setLoading(false);
     }
   };
 
-
   const withdrawLiquidity = async (
     tokenId: string,
     liquidity: string,
-    amount0Min: string,
-    amount1Min: string
+    amount0Min: bigint,
+    amount1Min: bigint,
   ) => {
     if (!contract) {
-      throw new Error('Contract not initialized');
+      throw new Error("Contract not initialized");
     }
 
     try {
       setLoading(true);
       setError(null);
-      
+
       const tx = await contract.withdrawLiquidity(
         tokenId,
         liquidity,
         amount0Min,
-        amount1Min
+        amount1Min,
       );
-      await tx.wait();
+      const receipt = await tx.wait();
+      return receipt;
     } catch (err: any) {
-      console.error('Error withdrawing liquidity:', err);
-      setError(err.message || 'Failed to withdraw liquidity');
+      console.error("Error withdrawing liquidity:", err);
+      setError(err.message || "Failed to withdraw liquidity");
       throw err;
     } finally {
       setLoading(false);
@@ -212,14 +183,13 @@ export const useUniswapV3Adapter = (signer: JsonRpcSigner | null) => {
     amountOutMin: bigint,
   ) => {
     if (!contract) {
-      throw new Error('Contract not initialized');
+      throw new Error("Contract not initialized");
     }
 
     try {
       setLoading(true);
       setError(null);
-      debugger
-      
+
       const tx = await contract.swapExactInput(
         tokenIn,
         tokenOut,
@@ -227,10 +197,11 @@ export const useUniswapV3Adapter = (signer: JsonRpcSigner | null) => {
         amountIn,
         amountOutMin,
       );
-      await tx.wait();
+      const receipt = await tx.wait();
+      return receipt;
     } catch (err: any) {
-      console.error('Error swapping:', err);
-      setError(err.message || 'Failed to swap');
+      console.error("Error swapping:", err);
+      setError(err.message || "Failed to swap");
       throw err;
     } finally {
       setLoading(false);

@@ -7,17 +7,22 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\""
   },
   "dependencies": {
     "@apollo/client": "^4.0.4",
     "@headlessui/react": "^2.2.7",
     "@heroicons/react": "^2.2.0",
+    "@uniswap/sdk-core": "^7.7.2",
+    "@uniswap/v3-sdk": "^3.25.2",
     "ethers": "^6.15.0",
     "graphql": "^16.11.0",
+    "prettier": "^3.6.2",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "react-toastify": "^11.0.5"
+    "react-toastify": "^11.0.5",
+    "use-debounce": "^10.0.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",

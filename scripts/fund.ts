@@ -9,27 +9,32 @@ const ADDRESSES = {
 // Example USDC whale on mainnet
 const USDC_WHALE = "0xe398EE26023ba5013B37CBF1d373B68f8F541b20";
 
-
-
 // Helper function to fund an account with ETH and tokens
-export async function fundAccount(account: SignerWithAddress | string, tokenAddresses: string[], amounts: bigint[]) {
+export async function fundAccount(
+  account: SignerWithAddress | string,
+  tokenAddresses: string[],
+  amounts: bigint[],
+) {
   // Fund with ETH first
   await network.provider.send("hardhat_setBalance", [
     account instanceof SignerWithAddress ? account.address : account,
-    ethers.toBeHex(ethers.parseEther("100")) // 100 ETH
+    ethers.toBeHex(ethers.parseEther("100")), // 100 ETH
   ]);
 
   // Fund with tokens
   for (let i = 0; i < tokenAddresses.length; i++) {
     const tokenAddress = tokenAddresses[i];
     const amount = amounts[i];
-    const token = await ethers.getContractAt("IERC20", tokenAddress) as unknown as IERC20;
+    const token = (await ethers.getContractAt(
+      "IERC20",
+      tokenAddress,
+    )) as unknown as IERC20;
 
     if (tokenAddress === ADDRESSES.WETH) {
       // For WETH, we'll use the WETH contract to mint
       await network.provider.request({
         method: "hardhat_impersonateAccount",
-        params: [token.target]
+        params: [token.target],
       });
 
       const wethSigner = await ethers.getSigner(token.target as string);
@@ -37,19 +42,24 @@ export async function fundAccount(account: SignerWithAddress | string, tokenAddr
       // Fund the WETH contract with ETH first
       await network.provider.send("hardhat_setBalance", [
         token.target,
-        ethers.toBeHex(ethers.parseEther("100"))
+        ethers.toBeHex(ethers.parseEther("100")),
       ]);
 
       // Deposit ETH to get WETH
       // await token.connect(wethSigner).deposit({ value: amount });
 
       // Transfer WETH to the account
-      await token.connect(wethSigner).transfer(account instanceof SignerWithAddress ? account.address : account, amount);
+      await token
+        .connect(wethSigner)
+        .transfer(
+          account instanceof SignerWithAddress ? account.address : account,
+          amount,
+        );
 
       // Stop impersonating
       await network.provider.request({
         method: "hardhat_stopImpersonatingAccount",
-        params: [token.target]
+        params: [token.target],
       });
       continue;
     }
@@ -58,7 +68,7 @@ export async function fundAccount(account: SignerWithAddress | string, tokenAddr
     if (tokenAddress === ADDRESSES.USDC) {
       await network.provider.request({
         method: "hardhat_impersonateAccount",
-        params: [USDC_WHALE]
+        params: [USDC_WHALE],
       });
 
       const whale = await ethers.getSigner(USDC_WHALE);
@@ -66,16 +76,21 @@ export async function fundAccount(account: SignerWithAddress | string, tokenAddr
       // Fund the whale with ETH for gas
       await network.provider.send("hardhat_setBalance", [
         USDC_WHALE,
-        ethers.toBeHex(ethers.parseEther("10"))
+        ethers.toBeHex(ethers.parseEther("10")),
       ]);
 
       // Transfer USDC to the account
-      await token.connect(whale).transfer(account instanceof SignerWithAddress ? account.address : account, amount);
+      await token
+        .connect(whale)
+        .transfer(
+          account instanceof SignerWithAddress ? account.address : account,
+          amount,
+        );
 
       // Stop impersonating
       await network.provider.request({
         method: "hardhat_stopImpersonatingAccount",
-        params: [USDC_WHALE]
+        params: [USDC_WHALE],
       });
       continue;
     }
@@ -84,26 +99,21 @@ export async function fundAccount(account: SignerWithAddress | string, tokenAddr
   }
 }
 
-
-
 async function main() {
-  const address = "0xd0fCC6c24ceD9160ff99d8a77aC80E34F389BB94";
+  const address = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
   if (!address) {
     console.error("Please provide an address");
     process.exit(1);
   }
 
   const account = ethers.getAddress(address);
-  await fundAccount(account, Object.values(ADDRESSES), [ethers.parseUnits("100",6), ethers.parseEther("10")]);
-  
-
-
-
-
+  await fundAccount(account, Object.values(ADDRESSES), [
+    ethers.parseUnits("100", 6),
+    ethers.parseEther("10"),
+  ]);
 }
 
 main().catch((err) => {
   console.error(err);
   process.exitCode = 1;
 });
-

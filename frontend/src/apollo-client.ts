@@ -1,10 +1,12 @@
-import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
+import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
 
 // Get subgraph URL from environment variables
 const SUBGRAPH_URL = import.meta.env.VITE_SUBGRAPH_URL;
 
 if (!SUBGRAPH_URL) {
-  throw new Error('VITE_SUBGRAPH_URL environment variable is not set. Please create a .env file based on .env.example');
+  throw new Error(
+    "VITE_SUBGRAPH_URL environment variable is not set. Please create a .env file based on .env.example",
+  );
 }
 
 const httpLink = createHttpLink({
