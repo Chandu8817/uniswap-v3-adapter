@@ -19,7 +19,7 @@ const config: HardhatUserConfig = {
   networks: {
     hardhat: {
       forking:{
-        url: "https://rpc.ankr.com/arbitrum/b886c5e66f976c5296be03266ade2427c854883474a27d5e77a81a7a305a7c25",
+        url: "https://rpc.ankr.com/arbitrum/api-key", //  api key here or add rpc 
         
       }
     }
