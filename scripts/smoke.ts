@@ -3,14 +3,17 @@ import { IERC20, UniswapV3Adapter } from "../typechain-types";
 import { SignerWithAddress } from "@nomicfoundation/hardhat-ethers/signers";
 
 // Example USDC whale on mainnet
-const USDC_WHALE = "0xe398EE26023ba5013B37CBF1d373B68f8F541b20";
+const WHALE_ADDRESS = "0xe398EE26023ba5013B37CBF1d373B68f8F541b20";
 
+// Attach adapter (make sure to replace with actual deployed address)
+const ADAPTER_ADDRESS = "0x7e9a156b632b57f0c26d39EC3b70a229714C1a7D"; // address of adapter contract 
 const ADDRESSES = {
   SWAP_ROUTER: "0xE592427A0AEce92De3Edee1F18E0157C05861564",
   NONFUNGIBLE_POSITION_MANAGER: "0xC36442b4a4522E871399CD717aBDD847Ab11FE88",
   QUOTER_V2: "0x61fFE014bA17989E743c5F6cB21bF9697530B21e",
   USDC: "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
   WETH: "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+
 };
 
 export async function fundAccount(
@@ -62,14 +65,14 @@ export async function fundAccount(
     if (tokenAddress === ADDRESSES.USDC) {
       await network.provider.request({
         method: "hardhat_impersonateAccount",
-        params: [USDC_WHALE],
+        params: [WHALE_ADDRESS],
       });
 
-      const whale = await ethers.getSigner(USDC_WHALE);
+      const whale = await ethers.getSigner(WHALE_ADDRESS);
 
       // Fund the whale with ETH for gas
       await network.provider.send("hardhat_setBalance", [
-        USDC_WHALE,
+        WHALE_ADDRESS,
         ethers.toBeHex(ethers.parseEther("1000")),
       ]);
 
@@ -84,7 +87,7 @@ export async function fundAccount(
       // Stop impersonating
       await network.provider.request({
         method: "hardhat_stopImpersonatingAccount",
-        params: [USDC_WHALE],
+        params: [WHALE_ADDRESS],
       });
       continue;
     }
@@ -103,11 +106,10 @@ async function main() {
       ethers.parseEther("1"), // 1 WETH
     ],
   );
-  // Attach adapter (make sure to replace with actual deployed address)
-  const adapterAddr = "0x0CED7BC8e0E5Ec747B591480De6eFE084Ddb7Bb5";
+
   const adapter = (await ethers.getContractAt(
     "UniswapV3Adapter",
-    adapterAddr,
+    ADAPTER_ADDRESS,
   )) as unknown as UniswapV3Adapter;
 
   const usdc = (await ethers.getContractAt(
@@ -155,7 +157,6 @@ async function main() {
   const liquidityLog = receipt.logs.find(
     (log) => log.address.toLowerCase() === String(adapter.target).toLowerCase(),
   ) as any;
-  //  console.log("Liquidity added event:", liquidityLog);
 
   // Extract tokenId from event
   const tokenId = liquidityLog.args[0];

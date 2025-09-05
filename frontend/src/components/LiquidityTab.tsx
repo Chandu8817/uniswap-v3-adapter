@@ -75,8 +75,8 @@ export const LiquidityTab = ({ signer }: LiquidityTabProps) => {
   const hasSufficientBalance = useCallback(() => {
     if (!amountA || !amountB) return false;
     try {
-      const amountAWei = formatTokenAmount(amountA, decimalsA); // Assuming token A has 6 decimals (USDC)
-      const amountBWei = formatTokenAmount(amountB, decimalsB); // Assuming token B has 18 decimals (WETH)
+      const amountAWei = formatTokenAmount(amountA, decimalsA); 
+      const amountBWei = formatTokenAmount(amountB, decimalsB); 
       return (
         BigInt(balanceA) >= BigInt(amountAWei) &&
         BigInt(balanceB) >= BigInt(amountBWei)

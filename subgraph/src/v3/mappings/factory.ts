@@ -6,7 +6,7 @@ import { Pool as PoolTemplate } from '../../../generated/templates'
 import { populateEmptyPools } from '../../common/backfill'
 import { FACTORY_ADDRESS, POOL_MAPINGS, SKIP_POOLS, WHITELIST_TOKENS } from '../../common/chain'
 import { fetchTokenDecimals, fetchTokenName, fetchTokenSymbol, fetchTokenTotalSupply } from '../../common/token'
-import { ADDRESS_ZERO, ONE_BI, ZERO_BD, ZERO_BI } from './../../common/constants'
+import { ADDRESS_ZERO, ONE_BI, ZERO_BD, ZERO_BI } from '../../common/constants'
 
 export function handlePoolCreated(event: PoolCreated): void {
   const factoryAddress = Address.fromString(FACTORY_ADDRESS)

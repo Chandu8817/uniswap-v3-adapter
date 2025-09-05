@@ -3,7 +3,7 @@ import { ethers } from "ethers";
 import { JsonRpcSigner } from "ethers";
 import ERC20_ABI from "../abis/ERC20.json";
 
-// Replace with your contract address
+
 
 export const useERC20 = (signer: JsonRpcSigner | null) => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -146,6 +146,6 @@ export const useERC20 = (signer: JsonRpcSigner | null) => {
     loading,
     error,
     isInitialized: !!signer,
-    // Add other functions as needed
+    
   };
 };

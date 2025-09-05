@@ -341,14 +341,6 @@ export const SwapTab = ({ signer }: SwapTabProps) => {
           </div>
 
           <div className="flex space-x-2">
-            {/* <button
-            onClick={handleGetQuote}
-            disabled={quoteLoading}
-            className="bg-blue-500 text-white px-4 py-2 rounded flex-1 disabled:opacity-50"
-          >
-            {quoteLoading ? 'Fetching...' : 'Get Quote'}
-          </button> */}
-
             {allowanceIn < amountIn ? (
               <button
                 onClick={handleApproveTokenIn}

@@ -90,6 +90,6 @@ export const usePositionManager = (signer: JsonRpcSigner | null) => {
     getPosition,
     approve,
     isApproved,
-    // Add other functions as needed
+  
   };
 };

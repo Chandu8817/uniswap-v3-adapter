@@ -2,7 +2,7 @@
   "name": "uniswap-v3-adapter",
   "version": "1.0.0",
   "scripts": {
-     "format": "prettier --write \"scripts/**/*.{ts,tsx,js,jsx,json,css,md}\""
+    "format": "prettier --write \"scripts/**/*.{ts,tsx,js,jsx,json,css,md}\""
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^2.1.0",

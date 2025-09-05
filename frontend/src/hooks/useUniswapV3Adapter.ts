@@ -100,10 +100,6 @@ export const useUniswapV3Adapter = (signer: JsonRpcSigner | null) => {
       setLoading(true);
       setError(null);
 
-      // Parse amounts with appropriate decimals (18 for WETH, 6 for USDC, etc.)
-
-      // Convert amounts to BigInt with correct decimals
-
       console.log("Adding liquidity with params:", {
         tokenA,
         tokenB,

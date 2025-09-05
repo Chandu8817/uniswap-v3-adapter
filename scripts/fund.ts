@@ -93,7 +93,9 @@ export async function fundAccount(
         params: [USDC_WHALE],
       });
       continue;
+      
     }
+    
 
     throw new Error(`Unsupported token: ${tokenAddress}`);
   }

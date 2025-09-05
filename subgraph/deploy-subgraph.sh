@@ -24,8 +24,15 @@ docker-compose up -d
 echo "🛠️ Building subgraph..."
 yarn build --network "$NETWORK" --subgraph-type v3
 
+
+echo "⏳ Waiting for Graph Node to be ready(re run the sh file if getting any error)... "
+sleep 15 
+
+
 echo "📦 Creating subgraph..."
 graph create --node "$ALCHEMY_DEPLOY_URL" "$SUBGRAPH_NAME" || true
+
+  
 
 echo "📤 Deploying subgraph..."
 graph deploy \

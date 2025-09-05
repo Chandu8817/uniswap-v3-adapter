@@ -100,11 +100,11 @@ You have two options: **(A) one‑command script** or **(B) manual steps**.
 
 Before either option, update your **subgraph config** with the adapter address and the **start block** (the contract deployment block).
 
-* Update **`config.json`** and **`chain.ts`** in the `arbitrum-local` setup (path`v3-subgraph/arbitrum-local/chain.ts` and `v3-subgraph/arbitrum-local/config.json` in your repo)
+* Update **`config.json`** and **`chain.ts`** in the `arbitrum-local` setup (path`subgraph/arbitrum-local/chain.ts` and `subgraph/arbitrum-local/config.json` in your repo)
 * Add your Graph Node key to `.env` (as required by your script). Example:
 
 ```bash
-cd v3-subgraph
+cd subgraph
 
 ```
 
