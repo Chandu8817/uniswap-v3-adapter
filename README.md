@@ -164,6 +164,6 @@ graph create --node http://127.0.0.1:8020 uniswap-v3-arbitrum-ii
 graph deploy --node http://127.0.0.1:8020 --ipfs http://127.0.0.1:5001 --deploy-key dummykey --version-label local uniswap-v3-arbitrum-ii v3-subgraph.yaml
 
 # Frontend
-bun install
-bun dev
+yarn install
+yarn dev
 ```
