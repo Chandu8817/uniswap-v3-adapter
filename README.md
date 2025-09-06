@@ -29,7 +29,7 @@ npx hardhat node
 npx hardhat node --fork https://rpc.ankr.com/arbitrum/<API_KEY>
 ```
 
-### 1.2 Compile and  Deploy contracts in anthoer terminal 
+### 1.2 Compile and  Deploy contracts in another terminal 
 
 ```bash
 npx hardhat compile 
