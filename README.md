@@ -17,13 +17,6 @@ Step-by-step to run **contracts**, **subgraph**, and **frontend** locally on an 
 
 ## 1) Smart Contracts (Hardhat Fork)
 
-Perfect 👍 you want to add **`.env` instructions** into your setup guide so anyone can configure their environment before running Hardhat.
-
-Here’s how you can extend your doc with `.env` setup:
-
----
-
-## 1) Smart Contracts (Hardhat Fork)
 
 ### 1.0 Setup `.env`
 
