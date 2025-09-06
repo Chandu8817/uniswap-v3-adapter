@@ -8,7 +8,6 @@ Step-by-step to run **contracts**, **subgraph**, and **frontend** locally on an 
 ## Prerequisites
 
 * **Node.js** ≥ 18 + **npm**
-* **Bun** (for frontend) → [bun.sh](https://bun.sh) (or use npm/yarn)
 * **Docker** (Graph Node, IPFS, Postgres) make sure its running 
 * **Yarn**: `npm i -g yarn`
 * **Graph CLI**: `npm i -g @graphprotocol/graph-cli`
@@ -18,30 +17,58 @@ Step-by-step to run **contracts**, **subgraph**, and **frontend** locally on an 
 
 ## 1) Smart Contracts (Hardhat Fork)
 
+Perfect 👍 you want to add **`.env` instructions** into your setup guide so anyone can configure their environment before running Hardhat.
+
+Here’s how you can extend your doc with `.env` setup:
+
+---
+
+## 1) Smart Contracts (Hardhat Fork)
+
+### 1.0 Setup `.env`
+
+Create a **`.env`** file in the project root with the following:
+
+```env
+# whale address to fund local accounts
+WHALE_ADDRESS="0xe398EE26023ba5013B37CBF1d373B68f8F541b20"
+
+# deployed adapter contract address
+ADAPTER_ADDRESS="0x827872a1F9E57Ae83855cdC5682Cef3bbdF4139B"
+
+# token + router addresses (Arbitrum mainnet)
+USDC="0xaf88d065e77c8cC2239327C5EDb3A432268e5831"
+WETH="0x82aF49447D8a07e3bd95BD0d56f35241523fBab1"
+SWAP_ROUTER="0xE592427A0AEce92De3Edee1F18E0157C05861564"
+NONFUNGIBLE_POSITION_MANAGER="0xC36442b4a4522E871399CD717aBDD847Ab11FE88"
+QUOTER_V2="0x61fFE014bA17989E743c5F6cB21bF9697530B21e"
+ARBITRUM_RPC_URL="https://rpc.ankr.com/arbitrum/api-key"
+```
+
+
 ### 1.1 Start node
 
 ```bash
-npm install 
+npm install
 
 npx hardhat node
 
-# or
+# or fork Arbitrum 
 npx hardhat node --fork https://rpc.ankr.com/arbitrum/<API_KEY>
 ```
 
-### 1.2 Compile and  Deploy contracts in another terminal 
+### 1.2 Compile and Deploy contracts
 
 ```bash
-npx hardhat compile 
-
+npx hardhat compile
 npx hardhat run scripts/deploy.ts --network localhost
 ```
 
-👉 Save **adapter address** + **deploy block number**.
+👉 Save **adapter address** + **deploy block number** in `.env`.
 
 ### 1.3 Fund wallet
 
-Update `scripts/fund.ts` with your recipient address, then:
+Update `scripts/fund.ts` with your recipient address:
 
 ```bash
 npx hardhat run scripts/fund.ts --network localhost
@@ -49,13 +76,11 @@ npx hardhat run scripts/fund.ts --network localhost
 
 ### 1.4 Smoke test
 
-Update adapter in `scripts/smoke.ts`, then:
+Update adapter in `.env` or `scripts/smoke.ts`:
 
 ```bash
 npx hardhat run scripts/smoke.ts --network localhost
 ```
-
----
 
 ## 2) Subgraph
 
@@ -75,11 +100,22 @@ VERSION_LABEL=local
 SUBGRAPH_FILE=v3-subgraph.yaml
 ```
 
+dependency
+
+ ```bash
+
+ yarn install 
+
+ ```
+
+
+
 You can run the subgraph in **two ways**:
 
 **Option A — One command (recommended):**
 
 ```bash
+// for linux or mac
 chmod +x ./deploy-subgraph.sh 
 ./deploy-subgraph.sh
 
@@ -111,8 +147,8 @@ VITE_UNISWAP_V3_ADAPTER_ADDRESS=0xYourAdapterAddress
 Run:
 
 ```bash
-bun install
-bun dev
+yarn install
+yarn dev
 ```
 
 ---

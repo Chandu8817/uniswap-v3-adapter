@@ -1,5 +1,7 @@
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
+import * as dotenv from "dotenv";
+dotenv.config();
 
 
 const config: HardhatUserConfig = {
@@ -19,7 +21,7 @@ const config: HardhatUserConfig = {
   networks: {
     hardhat: {
       forking:{
-        url: "https://rpc.ankr.com/arbitrum/api-key", //  api key here or add rpc 
+        url: process.env.ARBITRUM_RPC_URL || "",  
         
       }
     }
