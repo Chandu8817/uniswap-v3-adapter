@@ -27,7 +27,7 @@ Create a **`.env`** file in the project root with the following:
 WHALE_ADDRESS="0xe398EE26023ba5013B37CBF1d373B68f8F541b20"
 
 # deployed adapter contract address
-ADAPTER_ADDRESS="0x827872a1F9E57Ae83855cdC5682Cef3bbdF4139B"
+ADAPTER_ADDRESS=""
 
 # token + router addresses (Arbitrum mainnet)
 USDC="0xaf88d065e77c8cC2239327C5EDb3A432268e5831"
