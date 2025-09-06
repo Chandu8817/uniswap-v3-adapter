@@ -1,20 +1,21 @@
 import { ethers, network } from "hardhat";
 import { IERC20, UniswapV3Adapter } from "../typechain-types";
 import { SignerWithAddress } from "@nomicfoundation/hardhat-ethers/signers";
+import * as dotenv from "dotenv";
+dotenv.config();
 
 // Example USDC whale on mainnet
 const WHALE_ADDRESS = "0xe398EE26023ba5013B37CBF1d373B68f8F541b20";
+const ADAPTER_ADDRESS = process.env.ADAPTER_ADDRESS as string ; // address of adapter contract
 
-// Attach adapter (make sure to replace with actual deployed address)
-const ADAPTER_ADDRESS = "0x7e9a156b632b57f0c26d39EC3b70a229714C1a7D"; // address of adapter contract 
-const ADDRESSES = {
-  SWAP_ROUTER: "0xE592427A0AEce92De3Edee1F18E0157C05861564",
-  NONFUNGIBLE_POSITION_MANAGER: "0xC36442b4a4522E871399CD717aBDD847Ab11FE88",
-  QUOTER_V2: "0x61fFE014bA17989E743c5F6cB21bF9697530B21e",
-  USDC: "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
-  WETH: "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
-
+ const ADDRESSES = {
+  USDC: process.env.USDC || "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
+  WETH:  process.env.WETH || "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
+  SWAP_ROUTER : process.env.SWAP_ROUTER || "0xE592427A0AEce92De3Edee1F18E0157C05861564",
+  NONFUNGIBLE_POSITION_MANAGER : process.env.NONFUNGIBLE_POSITION_MANAGER || "0xC36442b4a4522E871399CD717aBDD847Ab11FE88",
+  QUOTER_V2 : process.env.QUOTER_V2 || "0x61fFE014bA17989E743c5F6cB21bF9697530B21e",
 };
+
 
 export async function fundAccount(
   account: SignerWithAddress | string,

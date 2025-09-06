@@ -14,7 +14,6 @@
     "@nomicfoundation/hardhat-verify": "^2.1.1",
     "@typechain/ethers-v6": "^0.5.1",
     "@typechain/hardhat": "^9.1.0",
-    "@types/chai": "^5.2.2",
     "@types/mocha": "^10.0.10",
     "@types/node": "^24.3.0",
     "chai": "^4.5.0",
@@ -28,6 +27,7 @@
   },
   "dependencies": {
     "@openzeppelin/contracts": "^5.4.0",
+    "dotenv": "^17.2.2",
     "prettier": "^3.6.2"
   }
 }

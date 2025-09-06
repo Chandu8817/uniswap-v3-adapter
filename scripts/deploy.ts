@@ -29,6 +29,7 @@ async function main() {
 
   console.log(`Deployed in block number: ${receipt?.blockNumber}`);
   console.log("Adapter deployed to:", await adapter.getAddress());
+  console.log("Make sure to update the adapter address inside scripts/smoke.ts");
 }
 
 main().catch((err) => {

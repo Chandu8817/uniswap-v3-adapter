@@ -102,17 +102,18 @@ export async function fundAccount(
 }
 
 async function main() {
-  const address = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
-  if (!address) {
+  const recipient_address = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
+  if (!recipient_address) {
     console.error("Please provide an address");
     process.exit(1);
   }
 
-  const account = ethers.getAddress(address);
+  const account = ethers.getAddress(recipient_address);
   await fundAccount(account, Object.values(ADDRESSES), [
     ethers.parseUnits("100", 6),
     ethers.parseEther("10"),
   ]);
+  console.log(`Funded account ${account}`);
 }
 
 main().catch((err) => {
