@@ -158,6 +158,7 @@ npx hardhat run scripts/fund.ts --network localhost
 npx hardhat run scripts/smoke.ts --network localhost
 
 # Subgraph
+yarn install
 docker-compose up -d
 yarn build --network arbitrum-local --subgraph-type v3
 graph create --node http://127.0.0.1:8020 uniswap-v3-arbitrum-ii
