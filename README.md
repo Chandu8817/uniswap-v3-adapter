@@ -40,6 +40,8 @@ networks: {
 In **Terminal A**:
 
 ```bash
+npm install
+
 npx hardhat node
 # or explicitly:
 # npx hardhat node --fork https://rpc.ankr.com/arbitrum/<YOUR_API_KEY>
